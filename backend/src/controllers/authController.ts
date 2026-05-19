@@ -8,11 +8,6 @@ export const getMe = expressAsyncHandler(
   async (req: AuthRequest, res: Response) => {
     const { userId } = req;
 
-    if (!userId) {
-      res.status(401).json({ message: "Unauthorized" });
-      return;
-    }
-
     const user = await User.findById(userId);
     if (!user) {
       res.status(404).json({ message: "User not found" });
