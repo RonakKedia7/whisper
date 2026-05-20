@@ -2,14 +2,14 @@ import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@clerk/expo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { View } from "react-native";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const TabsLayout = () => {
   const insets = useSafeAreaInsets();
   const { isSignedIn, isLoaded } = useAuth();
 
   if (!isLoaded) {
-    return <View className="flex-1 bg-[#0D0D0F]" />;
+    return <LoadingScreen />;
   }
 
   if (!isSignedIn) {

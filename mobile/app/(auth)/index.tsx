@@ -1,31 +1,76 @@
-import { useSocialAuth } from "@/hooks/useSocialAuth";
 import {
-  ActivityIndicator,
+  View,
+  Text,
   Dimensions,
   Pressable,
-  Text,
-  TouchableOpacity,
-  View,
+  ActivityIndicator,
 } from "react-native";
-import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
-import LoadingScreen from "@/components/LoadingScreen";
+import { useSocialAuth } from "@/hooks/useSocialAuth";
+import { LinearGradient } from "expo-linear-gradient";
+import { BlurView } from "expo-blur";
+import { AnimatedOrb } from "@/components/AnimatedOrb";
 
 const { width, height } = Dimensions.get("window");
 
-export default function AuthScreen() {
-  const { handleSocialAuth, loadingProvider } = useSocialAuth();
+const AuthScreen = () => {
+  const { handleSocialAuth, loadingStrategy } = useSocialAuth();
 
-  const isGoogleLoading = loadingProvider === "oauth_google";
-  const isAppleLoading = loadingProvider === "oauth_apple";
+  const isLoading = loadingStrategy !== null;
 
   return (
     <View className="flex-1 bg-surface-dark">
+      <View className="absolute inset-0 overflow-hidden">
+        <LinearGradient
+          colors={["#0D0D0F", "#1A1A2E", "#16213E", "#0D0D0F"]}
+          style={{ position: "absolute", width: "100%", height: "100%" }}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        />
+
+        <AnimatedOrb
+          colors={["#F4A261", "#E76F51"]}
+          size={300}
+          initialX={-80}
+          initialY={height * 0.1}
+          duration={4000}
+        />
+        <AnimatedOrb
+          colors={["#E76F51", "#F4A261"]}
+          size={250}
+          initialX={width - 100}
+          initialY={height * 0.3}
+          duration={5000}
+        />
+        <AnimatedOrb
+          colors={["#FFD7BA", "#F4A261"]}
+          size={200}
+          initialX={width * 0.3}
+          initialY={height * 0.6}
+          duration={3500}
+        />
+        <AnimatedOrb
+          colors={["#F4B183", "#E76F51"]}
+          size={180}
+          initialX={-50}
+          initialY={height * 0.75}
+          duration={4500}
+        />
+
+        <BlurView
+          intensity={70}
+          tint="dark"
+          style={{ position: "absolute", width: "100%", height: "100%" }}
+        />
+      </View>
+
       <SafeAreaView className="flex-1">
+        {/* Top Section - Branding */}
         <View className="items-center pt-10">
           <Image
-            source={require("@/assets/images/logo.png")}
+            source={require("../../assets/images/logo.png")}
             style={{ width: 100, height: 100, marginVertical: -20 }}
             contentFit="contain"
           />
@@ -34,9 +79,10 @@ export default function AuthScreen() {
           </Text>
         </View>
 
+        {/* CENTER SECTION - HERO IMG */}
         <View className="flex-1 justify-center items-center px-6">
           <Image
-            source={require("@/assets/images/auth.png")}
+            source={require("../../assets/images/auth.png")}
             style={{
               width: width - 48,
               height: height * 0.3,
@@ -44,6 +90,7 @@ export default function AuthScreen() {
             contentFit="contain"
           />
 
+          {/* Headline */}
           <View className="mt-6 items-center">
             <Text className="text-5xl font-bold text-foreground text-center font-sans">
               Connect & Chat
@@ -53,18 +100,22 @@ export default function AuthScreen() {
             </Text>
           </View>
 
+          {/* AUTH BUTTONS */}
           <View className="flex-row gap-4 mt-10">
+            {/* GOOGLE BTN */}
             <Pressable
               className="flex-1 flex-row items-center justify-center gap-2 bg-white/95 py-4 rounded-2xl active:scale-[0.97]"
-              disabled={!!loadingProvider}
-              onPress={() => handleSocialAuth("oauth_google")}
+              disabled={isLoading}
+              accessibilityRole="button"
+              accessibilityLabel="Continue with Google"
+              onPress={() => !isLoading && handleSocialAuth("oauth_google")}
             >
-              {isGoogleLoading ? (
+              {loadingStrategy === "oauth_google" ? (
                 <ActivityIndicator size="small" color="#1a1a1a" />
               ) : (
                 <>
                   <Image
-                    source={require("@/assets/images/google.png")}
+                    source={require("../../assets/images/google.png")}
                     style={{ width: 20, height: 20 }}
                     contentFit="contain"
                   />
@@ -74,16 +125,20 @@ export default function AuthScreen() {
                 </>
               )}
             </Pressable>
+
+            {/* APPLE BTN */}
             <Pressable
               className="flex-1 flex-row items-center justify-center gap-2 bg-white/10 py-4 rounded-2xl border border-white/20 active:scale-[0.97]"
-              disabled={!!loadingProvider}
-              onPress={() => handleSocialAuth("oauth_apple")}
+              disabled={isLoading}
+              accessibilityRole="button"
+              accessibilityLabel="Continue with Apple"
+              onPress={() => !isLoading && handleSocialAuth("oauth_apple")}
             >
-              {isAppleLoading ? (
-                <ActivityIndicator size="small" color="#ffffff" />
+              {loadingStrategy === "oauth_apple" ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
               ) : (
                 <>
-                  <Ionicons name="logo-apple" size={20} color={"#FFFFFF"} />
+                  <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
                   <Text className="text-foreground font-semibold text-sm">
                     Apple
                   </Text>
@@ -95,4 +150,6 @@ export default function AuthScreen() {
       </SafeAreaView>
     </View>
   );
-}
+};
+
+export default AuthScreen;

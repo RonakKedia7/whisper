@@ -7,7 +7,7 @@ import { Alert } from "react-native";
 type OAuthStrategy = "oauth_google" | "oauth_apple";
 
 export const useSocialAuth = () => {
-  const [loadingProvider, setLoadingProvider] = useState<OAuthStrategy | null>(
+  const [loadingStrategy, setLoadingStrategy] = useState<OAuthStrategy | null>(
     null,
   );
 
@@ -15,9 +15,9 @@ export const useSocialAuth = () => {
   const router = useRouter();
 
   const handleSocialAuth = async (strategy: OAuthStrategy) => {
-    if (loadingProvider) return;
+    if (loadingStrategy) return;
 
-    setLoadingProvider(strategy);
+    setLoadingStrategy(strategy);
 
     try {
       const redirectUrl = Linking.createURL("sso-callback");
@@ -29,7 +29,7 @@ export const useSocialAuth = () => {
 
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
-        router.replace("/" as any);
+        router.replace("/");
       }
     } catch (error) {
       console.log("Error in social auth", error);
@@ -41,12 +41,12 @@ export const useSocialAuth = () => {
         `Failed to sign in with ${provider}. Please try again.`,
       );
     } finally {
-      setLoadingProvider(null);
+      setLoadingStrategy(null);
     }
   };
 
   return {
     handleSocialAuth,
-    loadingProvider,
+    loadingStrategy,
   };
 };

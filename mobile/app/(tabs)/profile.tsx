@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { Text, ScrollView, Pressable } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@clerk/expo";
@@ -6,8 +6,8 @@ import { useAuth } from "@clerk/expo";
 const ProfileScreen = () => {
   const { signOut } = useAuth();
   return (
-    <SafeAreaView>
-      <ScrollView className="bg-surface ">
+    <SafeAreaView className="bg-surface flex-1">
+      <ScrollView className="bg-surface">
         <Text className="text-white">ProfileScreen</Text>
         <Pressable
           onPress={() => signOut()}
