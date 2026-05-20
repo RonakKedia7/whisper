@@ -1,9 +1,16 @@
 import { useSocialAuth } from "@/hooks/useSocialAuth";
-import { Dimensions, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import AuthLoadingOverlay from "@/components/AuthLoadingOverlay";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const { width, height } = Dimensions.get("window");
 
@@ -48,37 +55,44 @@ export default function AuthScreen() {
 
           <View className="flex-row gap-4 mt-10">
             <Pressable
-              className="flex-1 flex-row items-center justify-center gap-2 bg-white/95 py-4 rounded-2xl active:scale-[0.97] disabled:opacity-50"
+              className="flex-1 flex-row items-center justify-center gap-2 bg-white/95 py-4 rounded-2xl active:scale-[0.97]"
               disabled={!!loadingProvider}
               onPress={() => handleSocialAuth("oauth_google")}
             >
-              <Image
-                source={require("@/assets/images/google.png")}
-                style={{ width: 20, height: 20 }}
-                contentFit="contain"
-              />
-              <Text className="text-gray-900 font-semibold text-sm">
-                Google
-              </Text>
+              {isGoogleLoading ? (
+                <ActivityIndicator size="small" color="#1a1a1a" />
+              ) : (
+                <>
+                  <Image
+                    source={require("@/assets/images/google.png")}
+                    style={{ width: 20, height: 20 }}
+                    contentFit="contain"
+                  />
+                  <Text className="text-gray-900 font-semibold text-sm">
+                    Google
+                  </Text>
+                </>
+              )}
             </Pressable>
             <Pressable
-              className="flex-1 flex-row items-center justify-center gap-2 bg-white/10 py-4 rounded-2xl border border-white/20 active:scale-[0.97] disabled:opacity-50"
+              className="flex-1 flex-row items-center justify-center gap-2 bg-white/10 py-4 rounded-2xl border border-white/20 active:scale-[0.97]"
               disabled={!!loadingProvider}
               onPress={() => handleSocialAuth("oauth_apple")}
             >
-              <Ionicons name="logo-apple" size={20} color={"#FFFFFF"} />
-              <Text className="text-foreground font-semibold text-sm">
-                Apple
-              </Text>
+              {isAppleLoading ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <>
+                  <Ionicons name="logo-apple" size={20} color={"#FFFFFF"} />
+                  <Text className="text-foreground font-semibold text-sm">
+                    Apple
+                  </Text>
+                </>
+              )}
             </Pressable>
           </View>
         </View>
       </SafeAreaView>
-
-      <AuthLoadingOverlay
-        isVisible={!!loadingProvider}
-        provider={loadingProvider}
-      />
     </View>
   );
 }

@@ -20,7 +20,7 @@ const TabsLayout = () => {
     <Tabs
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: "#0D0D0F" },
+
         tabBarStyle: {
           backgroundColor: "#0D0D0F",
           borderTopColor: "#1A1A1D",
