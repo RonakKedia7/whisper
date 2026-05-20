@@ -29,7 +29,7 @@ export const useSocialAuth = () => {
 
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
-        router.replace("/");
+        router.replace("/(tabs)");
       }
     } catch (error) {
       console.log("Error in social auth", error);
