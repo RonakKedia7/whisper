@@ -7,6 +7,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { View } from "react-native";
 import LoadingScreen from "@/components/LoadingScreen";
+import { AuthSync } from "@/components/AuthSync";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -53,6 +55,8 @@ export default function RootLayout() {
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <QueryClientProvider client={queryClient}>
+        <AuthSync />
+        <StatusBar style="light" />
         <AppStack />
       </QueryClientProvider>
     </ClerkProvider>
